@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.4//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.Liuyichen.oa.dao.WeiBaoDealRecordDao">
+    <resultMap id="wei_bao_deal_record" type="WeiBaoDealRecord">
+        <id property="id" column="id" javaType="Integer"/>
+        <result property="weiBaoId" column="wei_bao_id" javaType="Integer"/>
+        <result property="dealSn" column="deal_sn" javaType="String"/>
+        <result property="dealTime" column="deal_time" javaType="java.util.Date"/>
+        <result property="dealWay" column="deal_way" javaType="String"/>
+        <result property="dealResult" column="deal_result" javaType="String"/>
+        <result property="comment" column="comment" javaType="String"/>
+        <association property="dealer" column="next_deal_sn" javaType="Employee">
+            <result property="name" column="ename" javaType="String"/>
+            <result property="post" column="epost" javaType="String"/>
+        </association>
+    </resultMap>
+
+    <insert id="insert" parameterType="WeiBaoDealRecord">
+        insert into wei_bao_deal_record(wei_bao_id,deal_sn,deal_time,deal_way,deal_result,comment)
+        values(#{weiBaoId},#{dealSn},#{dealTime},#{dealWay},#{dealResult},#{comment});
+    </insert>
+    <select id="selectByWeiBao" resultMap="wei_bao_deal_record">
+        select d.*,e.name ename,e.post epost from wei_bao_deal_record d
+        left join employee e on d.deal_sn = e.sn
+        where d.wei_bao_id=#{cvid} order by d.deal_time;
+    </select>
+</mapper>

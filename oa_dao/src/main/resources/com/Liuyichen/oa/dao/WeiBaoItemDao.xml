@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.4//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.Liuyichen.oa.dao.WeiBaoItemDao">
+
+    <resultMap id="wei_bao_item" type="WeiBaoItem">
+        <id property="id" column="id" javaType="Integer"/>
+        <result property="weiBaoId" column="wei_bao_id" javaType="Integer"/>
+        <result property="item" column="item" javaType="String"/>
+        <result property="amount" column="amount" javaType="Double"/>
+        <result property="comment" column="comment" javaType="String"/>
+    </resultMap>
+
+    <insert id="insert" parameterType="WeiBaoItem">
+        insert into wei_bao_item(wei_bao_id,item,amount,comment)
+        values(#{weiBaoId},#{item},#{amount},#{comment});
+    </insert>
+    <update id="update" parameterType="WeiBaoItem">
+        update wei_bao_item set wei_bao_id=#{weiBaoId},item=#{item},amount=#{amount},comment=#{comment}
+        where id=#{id};
+    </update>
+    <delete id="delete" parameterType="Integer">
+        delete from wei_bao_item where id=#{id};
+    </delete>
+    <select id="selectByWeiBao" resultMap="wei_bao_item">
+        select * from wei_bao_item where wei_bao_id=#{cvid} order by id;
+    </select>
+</mapper>

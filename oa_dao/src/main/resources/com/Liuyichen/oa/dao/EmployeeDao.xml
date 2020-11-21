@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.4//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.Liuyichen.oa.dao.EmployeeDao">
+
+    <resultMap id="employee" type="Employee">
+        <id property="sn" column="sn" javaType="String"/>
+        <result property="password" column="password" javaType="String"/>
+        <result property="name" column="name" javaType="String"/>
+        <result property="departmentSn" column="departmentSn" javaType="String"/>
+        <result property="post" column="post" javaType="String"/>
+        <result property="clocktime" column="clocktime" javaType="java.util.Date"/>
+        <result property="cloack_status" column="cloack_status" javaType="String"/>
+        <result property="clock_open_time" column="clock_open_time" javaType="java.util.Date"/>
+        <result property="login_num" column="login_num" javaType="int"/>
+        <association property="department" column="department_sn" javaType="Department">
+            <id property="sn" column="dsn" javaType="String"/>
+            <result property="name" column="dname" javaType="String"/>
+        </association>
+    </resultMap>
+
+    <insert id="insert" parameterType="Employee">
+        insert into employee values
+        (#{sn},#{password},#{name},#{departmentSn},#{post},#{clocktime},#{cloack_status},#{clock_open_time},#{login_num});
+    </insert>
+    <update id="update" parameterType="Employee">
+        update employee set
+        name=#{name},password=#{password},department_sn=#{departmentSn},post=#{post},clocktime=#{clocktime},cloack_status=#{cloack_status},clock_open_time=#{clock_open_time},login_num=#{login_num}
+        where sn=#{sn};
+    </update>
+    <delete id="delete" parameterType="String">
+        delete from employee where sn=#{sn};
+    </delete>
+    <select id="selectStatus" parameterType="String" resultMap="employee">
+        select * from employee;
+    </select>
+    <select id="select" parameterType="String" resultMap="employee">
+        select e.*,d.sn dsn,d.name dname from employee e left join department d on d.sn=e.department_sn
+        where e.sn=#{sn};
+    </select>
+    <select id="selectAll" resultMap="employee">
+        select e.*,d.sn dsn,d.name dname from employee e left join department d on d.sn=e.department_sn;
+    </select>
+    <select id="selectByDepartmentAndPost" resultMap="employee">
+        select e.*,d.sn dsn,d.name dname from employee e left join department d on d.sn=e.department_sn
+        where e.sn is not null
+        <if test="dsn != null">
+            and e.department_sn = #{dsn}
+        </if>
+        <if test="post != null">
+            and e.post = #{post}
+        </if>
+    </select>
+</mapper>

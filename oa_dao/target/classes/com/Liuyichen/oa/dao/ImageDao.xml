@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.4//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.Liuyichen.oa.dao.ImageDao">
+
+    <resultMap id="image" type="Image">
+        <result property="createSn" column="createSn" javaType="String"/>
+        <result property="imageName" column="imageName" javaType="String"/>
+        <result property="imagePath" column="imagePath" javaType="String"/>
+        <result property="noyes" column="noyes" javaType="String"/>
+        <association property="createSn" column="createSn" javaType="Employee">
+            <result property="name" column="cname" javaType="String"/>
+        </association>
+    </resultMap>
+
+    <insert id="insertCopy" parameterType="Image">
+        insert into images_copy values (#{createSn},#{imageName},#{imagePath},#{noyes});
+    </insert>
+    <insert id="insert" parameterType="Image">
+        insert into images values (#{createSn},#{imageName},#{imagePath},#{noyes});
+    </insert>
+    <delete id="deleteCopy" parameterType="String">
+        delete from images_copy where createSn=#{createSn};
+    </delete>
+    <delete id="delete" parameterType="String">
+        delete from images where createSn=#{createSn};
+    </delete>
+    <select id="select" parameterType="String" resultMap="image">
+        select * from images where noyes=#{noyes};
+    </select>
+    <select id="selectCopy" parameterType="String" resultMap="image">
+        select * from images_copy where noyes=#{noyes};
+    </select>
+    <select id="selectAllCopy" resultMap="image">
+        select * from images_copy;
+    </select>
+    <select id="selectAll" resultMap="image">
+        select * from images;
+    </select>
+    <delete id="deleteAll" parameterType="String">
+        delete from images;
+    </delete>
+</mapper>
